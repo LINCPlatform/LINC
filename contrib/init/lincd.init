@@ -1,0 +1,67 @@
+#!/bin/bash
+#
+#  lincd The LINC Core server.
+#
+#
+# chkconfig: 345 80 20
+# description: lincd
+# processname: lincd
+#
+
+# Source function library.
+. /etc/init.d/functions
+
+# you can override defaults in /etc/sysconfig/lincd, see below
+if [ -f /etc/sysconfig/lincd ]; then
+        . /etc/sysconfig/lincd
+fi
+
+RETVAL=0
+
+prog=lincd
+# you can override the lockfile via BITCOIND_LOCKFILE in /etc/sysconfig/lincd
+lockfile=${BITCOIND_LOCKFILE-/var/lock/subsys/lincd}
+
+# lincd defaults to /usr/bin/lincd, override with BITCOIND_BIN
+lincd=${BITCOIND_BIN-/usr/bin/lincd}
+
+# lincd opts default to -disablewallet, override with BITCOIND_OPTS
+lincd_opts=${BITCOIND_OPTS--disablewallet}
+
+start() {
+    echo -n $"Starting $prog: "
+    daemon $DAEMONOPTS $lincd $lincd_opts
+    RETVAL=$?
+    echo
+    [ $RETVAL -eq 0 ] && touch $lockfile
+    return $RETVAL
+}
+
+stop() {
+    echo -n $"Stopping $prog: "
+    killproc $prog
+    RETVAL=$?
+    echo
+    [ $RETVAL -eq 0 ] && rm -f $lockfile
+    return $RETVAL
+}
+
+case "$1" in
+    start)
+        start
+        ;;
+    stop)
+        stop
+        ;;
+    status)
+        status $prog
+        ;;
+    restart)
+        stop
+        start
+        ;;
+    *)
+        echo "Usage: service $prog {start|stop|status|restart}"
+        exit 1
+        ;;
+esac

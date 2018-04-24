@@ -1,0 +1,22 @@
+[Unit]
+Description=LINC's distributed currency daemon
+After=network.target
+
+[Service]
+User=linc
+Group=linc
+
+Type=forking
+PIDFile=/var/lib/lincd/lincd.pid
+ExecStart=/usr/bin/lincd -daemon -pid=/var/lib/lincd/lincd.pid \
+-conf=/etc/linc/linc.conf -datadir=/var/lib/lincd -disablewallet
+
+Restart=always
+PrivateTmp=true
+TimeoutStopSec=60s
+TimeoutStartSec=2s
+StartLimitInterval=120s
+StartLimitBurst=5
+
+[Install]
+WantedBy=multi-user.target

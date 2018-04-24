@@ -1,0 +1,20 @@
+<!DOCTYPE RCC><RCC version="1.0">
+    <qresource prefix="/translations">
+        <file alias="bg">locale/linc_bg.qm</file>
+        <file alias="de">locale/linc_de.qm</file>
+        <file alias="en">locale/linc_en.qm</file>
+        <file alias="es">locale/linc_es.qm</file>
+        <file alias="fi">locale/linc_fi.qm</file>
+        <file alias="fr">locale/linc_fr.qm</file>
+        <file alias="it">locale/linc_it.qm</file>
+        <file alias="ja">locale/linc_ja.qm</file>
+        <file alias="pl">locale/linc_pl.qm</file>
+        <file alias="pt">locale/linc_pt.qm</file>
+        <file alias="ru">locale/linc_ru.qm</file>
+        <file alias="sk">locale/linc_sk.qm</file>
+        <file alias="sv">locale/linc_sv.qm</file>
+        <file alias="vi">locale/linc_vi.qm</file>
+        <file alias="zh_CN">locale/linc_zh_CN.qm</file>
+        <file alias="zh_TW">locale/linc_zh_TW.qm</file>
+    </qresource>
+</RCC>

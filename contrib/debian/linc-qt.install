@@ -1,0 +1,6 @@
+usr/local/bin/linc-qt usr/bin
+share/pixmaps/linc32.xpm usr/share/pixmaps
+share/pixmaps/linc16.xpm usr/share/pixmaps
+share/pixmaps/linc128.png usr/share/pixmaps
+debian/linc-qt.desktop usr/share/applications
+debian/linc-qt.protocol usr/share/kde4/services/

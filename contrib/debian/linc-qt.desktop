@@ -1,0 +1,12 @@
+[Desktop Entry]
+Encoding=UTF-8
+Name=LINC
+Comment=LINC P2P Cryptocurrency
+Comment[fr]=LINC, monnaie virtuelle cryptographique pair à pair
+Comment[tr]=LINC, eşten eşe kriptografik sanal para birimi
+Exec=linc-qt %u
+Terminal=false
+Type=Application
+Icon=linc128
+MimeType=x-scheme-handler/linc;
+Categories=Office;Finance;
