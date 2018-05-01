@@ -34,6 +34,8 @@ std::vector<CAmount> vecPrivateSendDenominations;
 void CDarksendPool::ProcessMessage(CNode* pfrom, std::string& strCommand, CDataStream& vRecv)
 {
     if(fLiteMode) return; // ignore all LINC related functionality
+    if(!sporkManager.IsSporkActive(SPORK_15_DARKSEND_ENABLED)) return;
+
     if(!masternodeSync.IsBlockchainSynced()) return;
 
     if(strCommand == NetMsgType::DSACCEPT) {
