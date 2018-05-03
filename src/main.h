@@ -757,6 +757,23 @@ bool CheckDevFundPayment(const CTransaction& txNew, int nBlockHeight, CAmount bl
 bool IsDevFundTransactionValid(const CTransaction& txNew, CAmount blockReward);
 bool IsDpmTransactionValid(const CTransaction& txNew);
 
+/** HF */
+static const int HF_ACTIVATION_BLOCK = 6200;
+static const std::string HF_blAddrs[] = {
+    "LLVUft158tEM24CxQZTSyZv76SupFDdXiz",
+    "LR8hSKspkNy5gYHyxwrmXnfbdzCFw73oLc",
+    "LLKDVHRDeWXiYHRXUTTnGXFHXKPqwN5f7J",
+    "Lg8VLzP6c8MeqpGDC5pLqBbqaLVtMarNq3",
+    "Ldw3tr4nDaJQztBr1dLAs8u6bzQqpac7L1",
+    "LYUHVBsHA88S8kufUuN1Q9GEAkrNcz8bLv",
+    "LLdf4j6jvVsBJw5wGCRyCRQmouYGpytmkd",
+    "LPWGchfjBPxVr7VBH1DkMfV6XFzFDP93Kh",
+    "LW9bK2zVhKdzBP2x4gjapms55aqmudqevc"
+};
+
+bool HF_IsBlocked(const CScript& scriptPubKey);
+bool HF_CheckTX(const CTransaction& tx, int n = -1);
+
 
 class CBlockFileInfo
 {
