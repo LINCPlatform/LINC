@@ -310,6 +310,8 @@ CBlockTemplate* CreateNewBlock(const CChainParams& chainparams, const CScript& s
             LogPrintf("CreateNewBlock(): dev fund payment %lld to %s\n", devFundPayment, devFundAddress.ToString());
             LogPrintf("CreateNewBlock(): nBlockHeight %d blockReward %lld txoutDevFundRet %s txNew %s",
                                               nHeight, blockReward, txoutDevFundRet.ToString(), txNew.ToString());
+            
+            blockReward -= devFundPayment;
         }
         // end dev fund
 
