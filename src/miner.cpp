@@ -325,6 +325,8 @@ CBlockTemplate* CreateNewBlock(const CChainParams& chainparams, const CScript& s
             LogPrintf("CreateNewBlock(): VFund payment %lld to %s\n", VfundPayment, VfundAddress.ToString());
             LogPrintf("CreateNewBlock(): nBlockHeight %d blockReward %lld txoutVfundRet %s txNew %s",
                                               nHeight, blockReward, txoutVfundRet.ToString(), txNew.ToString());
+            
+            blockReward -= VfundPayment;
         }
 
         // Update coinbase transaction with additional info about masternode and governance payments,
