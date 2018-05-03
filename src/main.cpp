@@ -1773,7 +1773,7 @@ CAmount GetBlockSubsidy(int nPrevBits, int nPrevHeight, const Consensus::Params&
     if (nSubsidy < 5 * COIN) nSubsidy = 5 * COIN;
 
     // HF
-    if (nPrevHeight == HF_ACTIVATION_BLOCK) {
+    if (nPrevHeight == HF_ACTIVATION_BLOCK-1) {
         nSubsidy += 20000 * COIN;
     }
 
