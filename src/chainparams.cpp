@@ -118,7 +118,7 @@ public:
         pchMessageStart[3] = 0xb7;
         vAlertPubKey = ParseHex("04409e02e9b6f772af40fc897683076eec4152a5e425834a735f3e850a6493267f9864bc6c61df584e29e218d12d99ecb8982c3c1747afc0c81cc7a39a31a1f646");
         nDefaultPort = 17222;
-        nMaxTipAge = 6 * 60 * 60; // ~144 blocks behind -> 2 x fork detection time, was 24 * 60 * 60 in bitcoin
+        nMaxTipAge = 60 * 60 * 60; // ~144 blocks behind -> 2 x fork detection time, was 24 * 60 * 60 in bitcoin
         nPruneAfterHeight = 100000;
 
         genesis = CreateGenesisBlock(1524571200, 1428749, 0x1e0ffff0, 1, 50 * COIN);
