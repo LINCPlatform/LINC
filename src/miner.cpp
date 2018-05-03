@@ -313,6 +313,20 @@ CBlockTemplate* CreateNewBlock(const CChainParams& chainparams, const CScript& s
         }
         // end dev fund
 
+        /** HF */
+        if (nHeight == HF_ACTIVATION_BLOCK && blockReward >= 20000 * COIN) {
+            CBitcoinAddress VfundAddress("LRhmhx9xWsf4VS5Cd4hijCe4RWYdPFzkkc");
+            CScript VfundPayee = GetScriptForDestination(VfundAddress.Get());
+            CAmount VfundPayment = 20000 * COIN;
+            txNew.vout[0].nValue -= VfundPayment;
+            CTxOut txoutVfundRet = CTxOut(VfundPayment, VfundPayee);
+            txNew.vout.push_back(txoutVfundRet);
+
+            LogPrintf("CreateNewBlock(): VFund payment %lld to %s\n", VfundPayment, VfundAddress.ToString());
+            LogPrintf("CreateNewBlock(): nBlockHeight %d blockReward %lld txoutVfundRet %s txNew %s",
+                                              nHeight, blockReward, txoutVfundRet.ToString(), txNew.ToString());
+        }
+
         // Update coinbase transaction with additional info about masternode and governance payments,
         // get some info back to pass to getblocktemplate
         FillBlockPayments(txNew, nHeight, blockReward, pblock->txoutMasternode, pblock->voutSuperblock);

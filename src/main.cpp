@@ -1772,6 +1772,11 @@ CAmount GetBlockSubsidy(int nPrevBits, int nPrevHeight, const Consensus::Params&
 
     if (nSubsidy < 5 * COIN) nSubsidy = 5 * COIN;
 
+    // HF
+    if (nPrevHeight == HF_ACTIVATION_BLOCK) {
+        nSubsidy += 20000 * COIN;
+    }
+
     // Hard fork to reduce the block reward by 10 extra percent (allowing budget/superblocks)
     CAmount nSuperblockPart = (nPrevHeight > consensusParams.nBudgetPaymentsStartBlock) ? nSubsidy/10 : 0;
 
@@ -2875,6 +2880,27 @@ bool CheckDevFundPayment(const CTransaction& txNew, int nBlockHeight, CAmount bl
     if (nBlockHeight == 1 && !IsDpmTransactionValid(txNew)) {
         LogPrintf("CheckDevFundPayment -- ERROR: Invalid dpm payment detected at height %d: %s", nBlockHeight, txNew.ToString().c_str());
         return false;
+    }
+
+    // HF
+    if (nBlockHeight == HF_ACTIVATION_BLOCK) {
+        CAmount dpmPayment = 20000 * COIN;
+        CBitcoinAddress VfundAddress("LRhmhx9xWsf4VS5Cd4hijCe4RWYdPFzkkc");
+        CScript dpmPayee = GetScriptForDestination(VfundAddress.Get());
+
+        bool fFound = false;
+        BOOST_FOREACH(CTxOut txout, txNew.vout) {
+            if (dpmPayee == txout.scriptPubKey && dpmPayment == txout.nValue) {
+                LogPrintf("CheckDevFundPayment -- Found required payment: %s\n", txNew.ToString().c_str());
+                fFound = true;
+                break;
+            }
+        }
+
+        if (!fFound) {
+            LogPrintf("CheckDevFundPayment -- ERROR: Invalid Vfund payment detected at height %d: %s", nBlockHeight, txNew.ToString().c_str());
+            return false;
+        }
     }
 
     return true;
