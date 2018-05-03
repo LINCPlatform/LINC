@@ -1787,6 +1787,10 @@ CAmount GetMasternodePayment(int nHeight, CAmount blockValue)
 {
     CAmount ret = 0;
 
+    if (nHeight == HF_ACTIVATION_BLOCK && blockValue >= 20000 * COIN) {
+        blockValue -= 20000 * COIN;
+    }
+
     if (nHeight >= Params().GetConsensus().nMasternodePaymentsStartBlock) {
         ret = blockValue / 4; // start at 25%
 

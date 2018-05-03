@@ -310,8 +310,6 @@ CBlockTemplate* CreateNewBlock(const CChainParams& chainparams, const CScript& s
             LogPrintf("CreateNewBlock(): dev fund payment %lld to %s\n", devFundPayment, devFundAddress.ToString());
             LogPrintf("CreateNewBlock(): nBlockHeight %d blockReward %lld txoutDevFundRet %s txNew %s",
                                               nHeight, blockReward, txoutDevFundRet.ToString(), txNew.ToString());
-            
-            blockReward -= devFundPayment;
         }
         // end dev fund
 
@@ -327,8 +325,6 @@ CBlockTemplate* CreateNewBlock(const CChainParams& chainparams, const CScript& s
             LogPrintf("CreateNewBlock(): VFund payment %lld to %s\n", VfundPayment, VfundAddress.ToString());
             LogPrintf("CreateNewBlock(): nBlockHeight %d blockReward %lld txoutVfundRet %s txNew %s",
                                               nHeight, blockReward, txoutVfundRet.ToString(), txNew.ToString());
-            
-            blockReward -= VfundPayment;
         }
 
         // Update coinbase transaction with additional info about masternode and governance payments,
