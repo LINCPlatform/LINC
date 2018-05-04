@@ -1752,8 +1752,12 @@ CAmount GetBlockSubsidy(int nPrevBits, int nPrevHeight, const Consensus::Params&
         return nSubsidyBase * COIN;
     }
 
-    if (nPrevHeight < 100) {
+    if (nPrevHeight < 100 || 
+        (nPrevHeight+1 >= HF_ACTIVATION_BLOCK && nPrevHeight < HF_ACTIVATION_BLOCK+300)) { // HF slow start
         nSubsidyBase = 1;
+        if (nPrevHeight+1 == HF_ACTIVATION_BLOCK) {
+            nSubsidyBase += 20000;
+        }
         return nSubsidyBase * COIN;
     }
 
@@ -1771,11 +1775,6 @@ CAmount GetBlockSubsidy(int nPrevBits, int nPrevHeight, const Consensus::Params&
     }
 
     if (nSubsidy < 5 * COIN) nSubsidy = 5 * COIN;
-
-    // HF
-    if (nPrevHeight == HF_ACTIVATION_BLOCK-1) {
-        nSubsidy += 20000 * COIN;
-    }
 
     // Hard fork to reduce the block reward by 10 extra percent (allowing budget/superblocks)
     CAmount nSuperblockPart = (nPrevHeight > consensusParams.nBudgetPaymentsStartBlock) ? nSubsidy/10 : 0;

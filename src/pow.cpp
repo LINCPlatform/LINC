@@ -11,6 +11,7 @@
 #include "primitives/block.h"
 #include "uint256.h"
 #include "util.h"
+#include "main.h"
 
 #include <math.h>
 
@@ -139,6 +140,11 @@ unsigned int static DarkGravityWave(const CBlockIndex* pindexLast, const Consens
 unsigned int GetNextWorkRequired(const CBlockIndex* pindexLast, const CBlockHeader *pblock, const Consensus::Params& params)
 {
     unsigned int retarget = DIFF_DGW;
+
+    // HF slow start
+    if (pindexLast->nHeight + 1 >= HF_ACTIVATION_BLOCK && pindexLast->nHeight < HF_ACTIVATION_BLOCK+50) {
+        return UintToArith256(params.powLimit).GetCompact();
+    }
 
     // mainnet/regtest share a configuration 
     if (Params().NetworkIDString() == CBaseChainParams::MAIN || Params().NetworkIDString() == CBaseChainParams::REGTEST) {
