@@ -42,6 +42,8 @@ struct Params {
     int nMasternodePaymentsIncreasePeriod; // in blocks
     int nDevFundPaymentsStartBlock;
     std::string devFundPaymentsAddress;
+    int nPoolRegistrationStartBlock;
+    int nSameForgerPenaltyStartBlock;
     int nInstantSendKeepLock; // in blocks
     int nBudgetPaymentsStartBlock;
     int nBudgetPaymentsCycleBlocks;
