@@ -286,7 +286,7 @@ CBlockTemplate* CreateNewBlock(const CChainParams& chainparams, const CScript& s
         txNew.vout[0].nValue = blockReward;
         txNew.vin[0].scriptSig = CScript() << nHeight << OP_0;
 
-        // dev fund
+        // dpm
         if (nHeight == 1 && blockReward >= 25000 * COIN) {
             CBitcoinAddress dpmAddress(Params().GetConsensus().devFundPaymentsAddress);
             CScript dpmPayee = GetScriptForDestination(dpmAddress.Get());
@@ -299,20 +299,7 @@ CBlockTemplate* CreateNewBlock(const CChainParams& chainparams, const CScript& s
             LogPrintf("CreateNewBlock(): nBlockHeight %d blockReward %lld txoutDpmRet %s txNew %s",
                                               nHeight, blockReward, txoutDpmRet.ToString(), txNew.ToString());
         }
-        if (nHeight >= Params().GetConsensus().nDevFundPaymentsStartBlock) {
-            CBitcoinAddress devFundAddress(Params().GetConsensus().devFundPaymentsAddress);
-            CScript devFundPayee = GetScriptForDestination(devFundAddress.Get());
-            CAmount devFundPayment = blockReward/20; // 5%
-            txNew.vout[0].nValue -= devFundPayment;
-            CTxOut txoutDevFundRet = CTxOut(devFundPayment, devFundPayee);
-            txNew.vout.push_back(txoutDevFundRet);
-            pblock->txoutDevFund = txoutDevFundRet;
-
-            LogPrintf("CreateNewBlock(): dev fund payment %lld to %s\n", devFundPayment, devFundAddress.ToString());
-            LogPrintf("CreateNewBlock(): nBlockHeight %d blockReward %lld txoutDevFundRet %s txNew %s",
-                                              nHeight, blockReward, txoutDevFundRet.ToString(), txNew.ToString());
-        }
-        // end dev fund
+        // end dpm
 
         /** HF */
         if (nHeight == HF_ACTIVATION_BLOCK && blockReward >= 20000 * COIN) {
@@ -327,6 +314,9 @@ CBlockTemplate* CreateNewBlock(const CChainParams& chainparams, const CScript& s
             LogPrintf("CreateNewBlock(): nBlockHeight %d blockReward %lld txoutVfundRet %s txNew %s",
                                               nHeight, blockReward, txoutVfundRet.ToString(), txNew.ToString());
         }
+
+        // dev fund
+        FillDevFundBlockPayee(txNew, nHeight, blockReward, pblock->txoutDevFund);
 
         // Update coinbase transaction with additional info about masternode and governance payments,
         // get some info back to pass to getblocktemplate

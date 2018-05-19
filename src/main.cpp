@@ -1804,6 +1804,35 @@ CAmount GetMasternodePayment(int nHeight, CAmount blockValue)
     return ret;
 }
 
+CAmount GetDevFundPayment(int nHeight, CAmount blockValue) {
+    if (nHeight >= Params().GetConsensus().nDevFundPaymentsStartBlock) {
+        return blockValue / 20; // 5%
+    }
+
+    return 0;
+}
+
+
+void FillDevFundBlockPayee(CMutableTransaction& txNew, int nBlockHeight, CAmount blockReward, CTxOut& txoutDevFundRet)
+{
+    txoutDevFundRet = CTxOut();
+
+    if (nBlockHeight >= Params().GetConsensus().nDevFundPaymentsStartBlock) {
+        CBitcoinAddress devFundAddress(Params().GetConsensus().devFundPaymentsAddress);
+        CScript devFundPayee = GetScriptForDestination(devFundAddress.Get());
+
+        CAmount devFundPayment = GetDevFundPayment(nBlockHeight, blockReward);
+
+        txNew.vout[0].nValue -= devFundPayment;
+        CTxOut txoutDevFundRet = CTxOut(devFundPayment, devFundPayee);
+        txNew.vout.push_back(txoutDevFundRet);
+
+        LogPrintf("FillDevFundBlockPayee(): dev fund payment %lld to %s\n", devFundPayment, devFundAddress.ToString());
+        LogPrintf("FillDevFundBlockPayee(): nBlockHeight %d blockReward %lld txoutDevFundRet %s txNew %s",
+                                          nBlockHeight, blockReward, txoutDevFundRet.ToString(), txNew.ToString());
+    }
+}
+
 bool IsInitialBlockDownload()
 {
     static bool lockIBDState = false;
