@@ -79,6 +79,7 @@ public:
     // memory only
     mutable CTxOut txoutMasternode; // masternode payment
     mutable std::vector<CTxOut> voutSuperblock; // superblock payment
+    mutable CTxOut txoutDevFund; // devfund payment
     mutable bool fChecked;
 
     CBlock()
@@ -106,6 +107,7 @@ public:
         vtx.clear();
         txoutMasternode = CTxOut();
         voutSuperblock.clear();
+        txoutDevFund = CTxOut();
         fChecked = false;
     }
 

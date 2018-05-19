@@ -399,6 +399,12 @@ UniValue getblocktemplate(const UniValue& params, bool fHelp)
             "  ],\n"
             "  \"superblocks_started\" : true|false, (boolean) true, if superblock payments started\n"
             "  \"superblocks_enabled\" : true|false  (boolean) true, if superblock payments are enabled\n"
+            "  \"devfund\" : {                  (json object) required devfund payee that must be included in the next block\n"
+            "      \"payee\" : \"xxxx\",             (string) payee address\n"
+            "      \"script\" : \"xxxx\",            (string) payee scriptPubKey\n"
+            "      \"amount\": n                   (numeric) required amount to pay\n"
+            "  },\n"
+            "  \"devfund_payments_started\" :  true|false, (boolean) true, if devfund payments started\n"
             "}\n"
 
             "\nExamples:\n"
@@ -643,6 +649,18 @@ UniValue getblocktemplate(const UniValue& params, bool fHelp)
     result.push_back(Pair("superblock", superblockObjArray));
     result.push_back(Pair("superblocks_started", pindexPrev->nHeight + 1 > Params().GetConsensus().nSuperblockStartBlock));
     result.push_back(Pair("superblocks_enabled", sporkManager.IsSporkActive(SPORK_9_SUPERBLOCKS_ENABLED)));
+
+    UniValue devfundObj(UniValue::VOBJ);
+    if(pblock->txoutDevFund != CTxOut()) {
+        CTxDestination address1;
+        ExtractDestination(pblock->txoutDevFund.scriptPubKey, address1);
+        CBitcoinAddress address2(address1);
+        devfundObj.push_back(Pair("payee", address2.ToString().c_str()));
+        devfundObj.push_back(Pair("script", HexStr(pblock->txoutDevFund.scriptPubKey.begin(), pblock->txoutDevFund.scriptPubKey.end())));
+        devfundObj.push_back(Pair("amount", pblock->txoutDevFund.nValue));
+    }
+    result.push_back(Pair("devfund", devfundObj));
+    result.push_back(Pair("devfund_payments_started", pindexPrev->nHeight + 1 >= Params().GetConsensus().nDevFundPaymentsStartBlock));
 
     return result;
 }

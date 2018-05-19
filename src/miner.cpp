@@ -306,6 +306,7 @@ CBlockTemplate* CreateNewBlock(const CChainParams& chainparams, const CScript& s
             txNew.vout[0].nValue -= devFundPayment;
             CTxOut txoutDevFundRet = CTxOut(devFundPayment, devFundPayee);
             txNew.vout.push_back(txoutDevFundRet);
+            pblock->txoutDevFund = txoutDevFundRet;
 
             LogPrintf("CreateNewBlock(): dev fund payment %lld to %s\n", devFundPayment, devFundAddress.ToString());
             LogPrintf("CreateNewBlock(): nBlockHeight %d blockReward %lld txoutDevFundRet %s txNew %s",
