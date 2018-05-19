@@ -32,6 +32,8 @@ struct CCheckpointData {
     double fTransactionsPerDay;
 };
 
+typedef std::map<int, std::set<std::string> > MapRegisteredPools;
+
 /**
  * CChainParams defines various tweakable parameters of a given instance of the
  * LINC system. There are three: the main network on which people trade goods
@@ -81,6 +83,7 @@ public:
     int FulfilledRequestExpireTime() const { return nFulfilledRequestExpireTime; }
     std::string SporkPubKey() const { return strSporkPubKey; }
     std::string MasternodePaymentPubKey() const { return strMasternodePaymentsPubKey; }
+    const MapRegisteredPools& RegisteredPools() const { return registeredPools; }
 protected:
     CChainParams() {}
 
@@ -106,6 +109,7 @@ protected:
     int nFulfilledRequestExpireTime;
     std::string strSporkPubKey;
     std::string strMasternodePaymentsPubKey;
+    MapRegisteredPools registeredPools;
 };
 
 /**

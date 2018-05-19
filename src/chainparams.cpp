@@ -168,6 +168,17 @@ public:
                         //   (the tx=... number in the SetBestChain debug.log lines)
             1500        // * estimated number of transactions per day after checkpoint
         };
+
+        registeredPools = boost::assign::map_list_of
+        (0,     boost::assign::list_of<std::string> ("").convert_to_container<std::set<std::string> >())
+        (21600, boost::assign::list_of<std::string> 
+                    ("LNg5rEQFKTDPzcFMJjZPyygPis1q8s6AYT")
+                    ("LNg5rEQFKTDPzcFMJjZPyygPis1q8s6AY1")
+                    ("LNg5rEQFKTDPzcFMJjZPyygPis1q8s6AY2")
+                    ("LNg5rEQFKTDPzcFMJjZPyygPis1q8s6AY3")
+                    ("LNg5rEQFKTDPzcFMJjZPyygPis1q8s6AY4")
+                    ("LNg5rEQFKTDPzcFMJjZPyygPis1q8s6AY5")
+                .convert_to_container<std::set<std::string> >()  );
     }
 };
 static CMainParams mainParams;
@@ -185,8 +196,8 @@ public:
         consensus.nMasternodePaymentsIncreasePeriod = 64800; // increase masternode reward every 64800 block
         consensus.nDevFundPaymentsStartBlock = 21600;
         consensus.devFundPaymentsAddress = "LZxvv1WkcsFoRVu6pEZUKumkhV2XGqSmjP";
-        consensus.nPoolRegistrationStartBlock = 21600;
-        consensus.nSameForgerPenaltyStartBlock = 25000;
+        consensus.nPoolRegistrationStartBlock = 0x7fffffff;
+        consensus.nSameForgerPenaltyStartBlock = 0x7fffffff;
         consensus.nInstantSendKeepLock = 6;
         consensus.nBudgetPaymentsStartBlock = 0x7fffffff; // no budget temporarily
         consensus.nBudgetPaymentsCycleBlocks = 50;
@@ -275,6 +286,8 @@ public:
             0         // * estimated number of transactions per day after checkpoint
         };
 
+        registeredPools = boost::assign::map_list_of
+        (0,     boost::assign::list_of<std::string> ("").convert_to_container<std::set<std::string> >());
     }
 };
 static CTestNetParams testNetParams;
@@ -292,8 +305,8 @@ public:
         consensus.nMasternodePaymentsIncreasePeriod = 10;
         consensus.nDevFundPaymentsStartBlock = 21600;
         consensus.devFundPaymentsAddress = "LZxvv1WkcsFoRVu6pEZUKumkhV2XGqSmjP";
-        consensus.nPoolRegistrationStartBlock = 21600;
-        consensus.nSameForgerPenaltyStartBlock = 25000;
+        consensus.nPoolRegistrationStartBlock = 0x7fffffff;
+        consensus.nSameForgerPenaltyStartBlock = 0x7fffffff;
         consensus.nInstantSendKeepLock = 6;
         consensus.nBudgetPaymentsStartBlock = 0x7fffffff;
         consensus.nBudgetPaymentsCycleBlocks = 50;
@@ -356,6 +369,10 @@ public:
             0,
             0
         };
+        
+        registeredPools = boost::assign::map_list_of
+        (0,     boost::assign::list_of<std::string> ("").convert_to_container<std::set<std::string> >());
+
         // Regtest LINC addresses start with 'r'
         base58Prefixes[PUBKEY_ADDRESS] = std::vector<unsigned char>(1,122);
         // Regtest LINC script addresses start with '8' or '9'
