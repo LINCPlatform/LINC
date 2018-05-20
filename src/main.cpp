@@ -2873,6 +2873,25 @@ bool ConnectBlock(const CBlock& block, CValidationState& state, CBlockIndex* pin
     }
     // END
 
+    // check if block forger is allowed
+    if (pindex->nHeight >= Params().GetConsensus().nPoolRegistrationStartBlock) {
+        CAmount minerReward = blockReward;
+        minerReward -= GetMasternodePayment(pindex->nHeight, blockReward);
+        minerReward -= GetDevFundPayment(pindex->nHeight, blockReward);
+
+        bool fMinerPaymentValid = false;
+        BOOST_FOREACH(const CTxOut& txout, block.vtx[0].vout) {
+            if (IsBlockForgerAllowed(pindex->nHeight, txout.scriptPubKey) && minerReward == txout.nValue) {
+                fMinerPaymentValid = true;
+                break;
+            }
+        }
+
+        if (!fMinerPaymentValid) {
+            return state.DoS(10, false, REJECT_INVALID, "bad-cb-forger-restricted");
+        }
+    }
+
     if (!control.Wait())
         return state.DoS(100, false);
     int64_t nTime4 = GetTimeMicros(); nTimeVerify += nTime4 - nTime2;
