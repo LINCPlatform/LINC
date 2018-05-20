@@ -74,8 +74,8 @@ public:
         consensus.nMasternodePaymentsIncreasePeriod = 64800; // increase masternode reward every 64800 block
         consensus.nDevFundPaymentsStartBlock = 21600;
         consensus.devFundPaymentsAddress = "LZxvv1WkcsFoRVu6pEZUKumkhV2XGqSmjP";
-        consensus.nPoolRegistrationStartBlock = 21600;
-        consensus.nSameForgerPenaltyStartBlock = 25000;
+        consensus.nPoolRegistrationStartBlock = 25200;
+        consensus.nSameForgerPenaltyStartBlock = 0x7fffffff;
         consensus.nInstantSendKeepLock = 24;
         consensus.nBudgetPaymentsStartBlock = 0x7fffffff; // no budget temporarily
         consensus.nBudgetPaymentsCycleBlocks = 16616; // ~(60*24*30)/2.6, actual number of blocks per month is 200700 / 12 = 16725
