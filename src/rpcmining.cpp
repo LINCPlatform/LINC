@@ -405,6 +405,11 @@ UniValue getblocktemplate(const UniValue& params, bool fHelp)
             "      \"amount\": n                   (numeric) required amount to pay\n"
             "  },\n"
             "  \"devfund_payments_started\" :  true|false, (boolean) true, if devfund payments started\n"
+            "  \"allowed_block_forgers\" : [         (array) allowed block forgers\n"
+            "      \"payee\",                       (string) payee address\n"
+            "      ,...\n"
+            "  ],\n"
+            "  \"allowed_block_forgers_enabled\" :  true|false, (boolean) true, if block forgers restriction enabled\n"
             "}\n"
 
             "\nExamples:\n"
@@ -661,6 +666,17 @@ UniValue getblocktemplate(const UniValue& params, bool fHelp)
     }
     result.push_back(Pair("devfund", devfundObj));
     result.push_back(Pair("devfund_payments_started", pindexPrev->nHeight + 1 >= Params().GetConsensus().nDevFundPaymentsStartBlock));
+
+    UniValue allowedBlockForgersArray(UniValue::VARR);
+    std::set<std::string> registeredPools;
+    ListRegisteredPools(pindexPrev->nHeight + 1, registeredPools);
+    BOOST_FOREACH (const std::string& addr, registeredPools) {
+        allowedBlockForgersArray.push_back(addr);
+    }
+
+    result.push_back(Pair("allowed_block_forgers", allowedBlockForgersArray));
+    result.push_back(Pair("allowed_block_forgers_started", pindexPrev->nHeight + 1 >= Params().GetConsensus().nPoolRegistrationStartBlock));
+
 
     return result;
 }
