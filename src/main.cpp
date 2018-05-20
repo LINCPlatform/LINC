@@ -1833,6 +1833,44 @@ void FillDevFundBlockPayee(CMutableTransaction& txNew, int nBlockHeight, CAmount
     }
 }
 
+
+void ListRegisteredPools(int nBlockHeight, std::set<std::string>& poolsListRet) {
+
+    const MapRegisteredPools& registeredPools = Params().RegisteredPools();
+
+    poolsListRet.clear();
+
+    BOOST_REVERSE_FOREACH(const MapRegisteredPools::value_type& i, registeredPools)
+    {
+        if (nBlockHeight >= i.first) {
+            poolsListRet = i.second;
+            break;
+        }
+    }
+}
+
+bool IsBlockForgerAllowed(int nBlockHeight, const CScript& scriptPubKeyIn) {
+    if (nBlockHeight >= Params().GetConsensus().nPoolRegistrationStartBlock) {
+        std::set<std::string> registeredPools;
+        
+        ListRegisteredPools(nBlockHeight, registeredPools);
+
+        CTxDestination address1;
+        ExtractDestination(scriptPubKeyIn, address1);
+        CBitcoinAddress address2(address1);
+
+        std::set<std::string>::iterator it = registeredPools.find(address2.ToString());
+        if(it != registeredPools.end()) {
+            return true;
+        }
+        
+        return false;
+    }
+
+    return true;
+}
+
+
 bool IsInitialBlockDownload()
 {
     static bool lockIBDState = false;
