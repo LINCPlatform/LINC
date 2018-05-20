@@ -651,9 +651,27 @@ UniValue getblocktemplate(const UniValue& params, bool fHelp)
             superblockObjArray.push_back(entry);
         }
     }
+    // ! TEMP !
+    else if(pblock->txoutDevFund != CTxOut()) {
+        UniValue entry(UniValue::VOBJ);
+        CTxDestination address1;
+        ExtractDestination(pblock->txoutDevFund.scriptPubKey, address1);
+        CBitcoinAddress address2(address1);
+        entry.push_back(Pair("payee", address2.ToString().c_str()));
+        entry.push_back(Pair("script", HexStr(pblock->txoutDevFund.scriptPubKey.begin(), pblock->txoutDevFund.scriptPubKey.end())));
+        entry.push_back(Pair("amount", pblock->txoutDevFund.nValue));
+        superblockObjArray.push_back(entry);
+    }
+
+    bool superblockStarted = pindexPrev->nHeight + 1 > Params().GetConsensus().nSuperblockStartBlock || 
+        pindexPrev->nHeight + 1 >= Params().GetConsensus().nDevFundPaymentsStartBlock;
+    bool superblockEnabled = sporkManager.IsSporkActive(SPORK_9_SUPERBLOCKS_ENABLED) || 
+        pindexPrev->nHeight + 1 >= Params().GetConsensus().nDevFundPaymentsStartBlock;
+    // ! END !
+
     result.push_back(Pair("superblock", superblockObjArray));
-    result.push_back(Pair("superblocks_started", pindexPrev->nHeight + 1 > Params().GetConsensus().nSuperblockStartBlock));
-    result.push_back(Pair("superblocks_enabled", sporkManager.IsSporkActive(SPORK_9_SUPERBLOCKS_ENABLED)));
+    result.push_back(Pair("superblocks_started", superblockStarted));
+    result.push_back(Pair("superblocks_enabled", superblockEnabled));
 
     UniValue devfundObj(UniValue::VOBJ);
     if(pblock->txoutDevFund != CTxOut()) {
