@@ -172,12 +172,12 @@ public:
         registeredPools = boost::assign::map_list_of
         (0,     std::set<std::string>() )
         (21600, boost::assign::list_of<std::string> 
-                    ("LNg5rEQFKTDPzcFMJjZPyygPis1q8s6AYT")
-                    ("LNg5rEQFKTDPzcFMJjZPyygPis1q8s6AY1")
-                    ("LNg5rEQFKTDPzcFMJjZPyygPis1q8s6AY2")
-                    ("LNg5rEQFKTDPzcFMJjZPyygPis1q8s6AY3")
-                    ("LNg5rEQFKTDPzcFMJjZPyygPis1q8s6AY4")
-                    ("LNg5rEQFKTDPzcFMJjZPyygPis1q8s6AY5")
+                    ("LNg5rEQFKTDPzcFMJjZPyygPis1q8s6AYT")  // LINC
+                    ("LPvR4Hjs2KT5NCBD5fATCxuY2n9Pd7yRMu")  // Saltpool
+                    ("LKaYw79j6j7ZKRp2HmgLAUdpafsjJ9hFUh")  // Hash4life
+                    ("LcByXiuQnAn55zAFTSUzmjysZXzUH3uX1P")  // FairMine
+                    ("LPeebZHVdKpVJcLZEJqYzTAf3hV6PDqJ3f")  // BSOD
+                    ("LiHjnMV83HpFfD3DzjCU9bdkV3SboR3cyt")  // WeekendPool
                 .convert_to_container<std::set<std::string> >()  );
     }
 };
