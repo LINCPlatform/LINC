@@ -162,16 +162,17 @@ public:
             boost::assign::map_list_of
             (  0, uint256S("0x0000083b904abb91545ffdc8bb61f9fabb4e728629b8975baaadb10eb0f54d99"))
             (  5900, uint256S("0x000000000c36c7a21a77b9b0610b6abfeba1f397de80333bdf608de3be77a245"))
-            (  6200, uint256S("0x000000d1c2d7e422860d402afb2d59fdfda9fed098a0048d200f67b89fc60228")),
-            1525469428, // * UNIX timestamp of last checkpoint block
-            10448,    // * total number of transactions between genesis and last checkpoint
+            (  6200, uint256S("0x000000d1c2d7e422860d402afb2d59fdfda9fed098a0048d200f67b89fc60228"))
+            (  17500, uint256S("0x000000002b2ea074603f98e4ee36ce50445dceb625962e6dc6d38be2486c8547")),
+            1526919682, // * UNIX timestamp of last checkpoint block
+            22888,    // * total number of transactions between genesis and last checkpoint
                         //   (the tx=... number in the SetBestChain debug.log lines)
             1500        // * estimated number of transactions per day after checkpoint
         };
 
         registeredPools = boost::assign::map_list_of
         (0,     std::set<std::string>() )
-        (21600, boost::assign::list_of<std::string> 
+        (25200, boost::assign::list_of<std::string> 
                     ("LNg5rEQFKTDPzcFMJjZPyygPis1q8s6AYT")  // LINC
                     ("LPvR4Hjs2KT5NCBD5fATCxuY2n9Pd7yRMu")  // Saltpool
                     ("LKaYw79j6j7ZKRp2HmgLAUdpafsjJ9hFUh")  // Hash4life
