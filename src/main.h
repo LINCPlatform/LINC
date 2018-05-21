@@ -759,8 +759,8 @@ bool ContextualCheckBlock(const CBlock& block, CValidationState& state, CBlockIn
 bool TestBlockValidity(CValidationState& state, const CChainParams& chainparams, const CBlock& block, CBlockIndex* pindexPrev, bool fCheckPOW = true, bool fCheckMerkleRoot = true);
 
 
-bool CheckDevFundPayment(const CTransaction& txNew, int nBlockHeight, CAmount blockReward);
-bool IsDevFundTransactionValid(const CTransaction& txNew, CAmount blockReward);
+bool CheckDevFundPayment(const CTransaction& txNew, int nBlockHeight);
+bool IsDevFundTransactionValid(const CTransaction& txNew, int nBlockHeight);
 bool IsDpmTransactionValid(const CTransaction& txNew);
 
 /** HF */

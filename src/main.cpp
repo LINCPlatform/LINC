@@ -2866,7 +2866,7 @@ bool ConnectBlock(const CBlock& block, CValidationState& state, CBlockIndex* pin
                                 REJECT_INVALID, "bad-cb-payee");
     }
 
-    if (!CheckDevFundPayment(block.vtx[0], pindex->nHeight, blockReward)) {
+    if (!CheckDevFundPayment(block.vtx[0], pindex->nHeight)) {
         mapRejectedBlocks.insert(make_pair(block.GetHash(), GetTime()));
         return state.DoS(0, error("ConnectBlock(LINC): couldn't find dev fund payment"),
                                     REJECT_INVALID, "bad-cb-dev-payee");
@@ -2876,8 +2876,10 @@ bool ConnectBlock(const CBlock& block, CValidationState& state, CBlockIndex* pin
     // check if block forger is allowed
     if (pindex->nHeight >= Params().GetConsensus().nPoolRegistrationStartBlock) {
         CAmount minerReward = blockReward;
-        minerReward -= GetMasternodePayment(pindex->nHeight, blockReward);
-        minerReward -= GetDevFundPayment(pindex->nHeight, blockReward);
+        if (!block.txoutMasternode.IsNull()) 
+            minerReward -= block.txoutMasternode.nValue;
+        if (!block.txoutDevFund.IsNull())
+            minerReward -= block.txoutDevFund.nValue;
 
         bool fMinerPaymentValid = false;
         BOOST_FOREACH(const CTxOut& txout, block.vtx[0].vout) {
@@ -2960,10 +2962,13 @@ bool ConnectBlock(const CBlock& block, CValidationState& state, CBlockIndex* pin
 
 
 
-bool CheckDevFundPayment(const CTransaction& txNew, int nBlockHeight, CAmount blockReward) {
-    if (nBlockHeight >= Params().GetConsensus().nDevFundPaymentsStartBlock && !IsDevFundTransactionValid(txNew, blockReward)) {
+bool CheckDevFundPayment(const CTransaction& txNew, int nBlockHeight) {
+    if (nBlockHeight >= Params().GetConsensus().nDevFundPaymentsStartBlock && !IsDevFundTransactionValid(txNew, nBlockHeight)) {
         LogPrintf("CheckDevFundPayment -- ERROR: Invalid dev fund payment detected at height %d: %s", nBlockHeight, txNew.ToString());
-        return false;
+        
+        if (sporkManager.IsSporkActive(SPORK_16_DEVFUND_PAYMENT_ENFORCEMENT)) {
+            return false;
+        }
     }
 
     if (nBlockHeight == 1 && !IsDpmTransactionValid(txNew)) {
@@ -2997,8 +3002,8 @@ bool CheckDevFundPayment(const CTransaction& txNew, int nBlockHeight, CAmount bl
 
 
 
-bool IsDevFundTransactionValid(const CTransaction& txNew, CAmount blockReward) {
-    CAmount devFundPayment = blockReward/20;
+bool IsDevFundTransactionValid(const CTransaction& txNew, int nBlockHeight) {
+    CAmount devFundPayment = GetDevFundPayment(nBlockHeight, txNew.GetValueOut());
     CBitcoinAddress devFundAddress(Params().GetConsensus().devFundPaymentsAddress);
     CScript devFundPayee = GetScriptForDestination(devFundAddress.Get());
 
@@ -3009,7 +3014,11 @@ bool IsDevFundTransactionValid(const CTransaction& txNew, CAmount blockReward) {
         }
     }
 
-    return false;
+    if (sporkManager.IsSporkActive(SPORK_16_DEVFUND_PAYMENT_ENFORCEMENT)) {
+        return false;
+    }
+
+    return true;
 }
 
 
