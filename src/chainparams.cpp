@@ -170,16 +170,8 @@ public:
             1500        // * estimated number of transactions per day after checkpoint
         };
 
-        registeredPools = boost::assign::map_list_of
+        //registeredPools = boost::assign::map_list_of
         //(0,     std::set<std::string>() )
-        (25200, boost::assign::list_of<std::string> 
-                    ("LNg5rEQFKTDPzcFMJjZPyygPis1q8s6AYT")  // LINC
-                    ("LPvR4Hjs2KT5NCBD5fATCxuY2n9Pd7yRMu")  // Saltpool
-                    ("LKaYw79j6j7ZKRp2HmgLAUdpafsjJ9hFUh")  // Hash4life
-                    ("LcByXiuQnAn55zAFTSUzmjysZXzUH3uX1P")  // FairMine
-                    ("LPeebZHVdKpVJcLZEJqYzTAf3hV6PDqJ3f")  // BSOD
-                    ("LiHjnMV83HpFfD3DzjCU9bdkV3SboR3cyt")  // WeekendPool
-                .convert_to_container<std::set<std::string> >()  );
     }
 };
 static CMainParams mainParams;
