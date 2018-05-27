@@ -171,7 +171,7 @@ public:
         };
 
         registeredPools = boost::assign::map_list_of
-        (0,     std::set<std::string>() )
+        //(0,     std::set<std::string>() )
         (25200, boost::assign::list_of<std::string> 
                     ("LNg5rEQFKTDPzcFMJjZPyygPis1q8s6AYT")  // LINC
                     ("LPvR4Hjs2KT5NCBD5fATCxuY2n9Pd7yRMu")  // Saltpool
@@ -287,8 +287,8 @@ public:
             0         // * estimated number of transactions per day after checkpoint
         };
 
-        registeredPools = boost::assign::map_list_of
-        (0,     std::set<std::string>());
+        //registeredPools = boost::assign::map_list_of
+        //(0,     std::set<std::string>());
     }
 };
 static CTestNetParams testNetParams;
@@ -371,8 +371,8 @@ public:
             0
         };
         
-        registeredPools = boost::assign::map_list_of
-        (0,     std::set<std::string>());
+        //registeredPools = boost::assign::map_list_of
+        //(0,     std::set<std::string>());
 
         // Regtest LINC addresses start with 'r'
         base58Prefixes[PUBKEY_ADDRESS] = std::vector<unsigned char>(1,122);

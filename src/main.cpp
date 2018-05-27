@@ -1824,7 +1824,7 @@ void FillDevFundBlockPayee(CMutableTransaction& txNew, int nBlockHeight, CAmount
         CAmount devFundPayment = GetDevFundPayment(nBlockHeight, blockReward);
 
         txNew.vout[0].nValue -= devFundPayment;
-        CTxOut txoutDevFundRet = CTxOut(devFundPayment, devFundPayee);
+        txoutDevFundRet = CTxOut(devFundPayment, devFundPayee);
         txNew.vout.push_back(txoutDevFundRet);
 
         LogPrintf("FillDevFundBlockPayee(): dev fund payment %lld to %s\n", devFundPayment, devFundAddress.ToString());
