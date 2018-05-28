@@ -163,15 +163,16 @@ public:
             (  0, uint256S("0x0000083b904abb91545ffdc8bb61f9fabb4e728629b8975baaadb10eb0f54d99"))
             (  5900, uint256S("0x000000000c36c7a21a77b9b0610b6abfeba1f397de80333bdf608de3be77a245"))
             (  6200, uint256S("0x000000d1c2d7e422860d402afb2d59fdfda9fed098a0048d200f67b89fc60228"))
-            (  17500, uint256S("0x000000002b2ea074603f98e4ee36ce50445dceb625962e6dc6d38be2486c8547")),
-            1526919682, // * UNIX timestamp of last checkpoint block
-            22888,    // * total number of transactions between genesis and last checkpoint
+            (  17500, uint256S("0x000000002b2ea074603f98e4ee36ce50445dceb625962e6dc6d38be2486c8547"))
+            (  22450, uint256S("0x000000006d63c7a0ab403310e2213664d81899c152554210856b8e19cbd77638")),
+            1527548150, // * UNIX timestamp of last checkpoint block
+            28315,    // * total number of transactions between genesis and last checkpoint
                         //   (the tx=... number in the SetBestChain debug.log lines)
             1500        // * estimated number of transactions per day after checkpoint
         };
 
         registeredPools = boost::assign::map_list_of
-        //(0,     std::set<std::string>() )
+        (0,     std::set<std::string>() )
         (25200, boost::assign::list_of<std::string> 
                     ("LNg5rEQFKTDPzcFMJjZPyygPis1q8s6AYT")  // LINC
                     ("LPvR4Hjs2KT5NCBD5fATCxuY2n9Pd7yRMu")  // Saltpool
@@ -287,8 +288,8 @@ public:
             0         // * estimated number of transactions per day after checkpoint
         };
 
-        //registeredPools = boost::assign::map_list_of
-        //(0,     std::set<std::string>());
+        registeredPools = boost::assign::map_list_of
+        (0,     std::set<std::string>());
     }
 };
 static CTestNetParams testNetParams;
@@ -371,8 +372,8 @@ public:
             0
         };
         
-        //registeredPools = boost::assign::map_list_of
-        //(0,     std::set<std::string>());
+        registeredPools = boost::assign::map_list_of
+        (0,     std::set<std::string>());
 
         // Regtest LINC addresses start with 'r'
         base58Prefixes[PUBKEY_ADDRESS] = std::vector<unsigned char>(1,122);
