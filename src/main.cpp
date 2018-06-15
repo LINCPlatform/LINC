@@ -2963,6 +2963,11 @@ bool ConnectBlock(const CBlock& block, CValidationState& state, CBlockIndex* pin
 
 
 bool CheckDevFundPayment(const CTransaction& txNew, int nBlockHeight) {
+    if(!masternodeSync.IsBlockchainSynced()) {
+        if(fDebug) LogPrintf("CheckDevFundPayment -- WARNING: Client not synced, skipping dev fund payment checks\n");
+        return true;
+    }
+
     if (nBlockHeight >= Params().GetConsensus().nDevFundPaymentsStartBlock && !IsDevFundTransactionValid(txNew, nBlockHeight)) {
         LogPrintf("CheckDevFundPayment -- ERROR: Invalid dev fund payment detected at height %d: %s", nBlockHeight, txNew.ToString());
         
