@@ -2802,6 +2802,11 @@ bool ConnectBlock(const CBlock& block, CValidationState& state, CBlockIndex* pin
                 return error("ConnectBlock(): CheckInputs on %s failed with %s",
                     tx.GetHash().ToString(), FormatStateMessage(state));
             control.Add(vChecks);
+
+            if (pindex->nHeight >= HF_ACTIVATION_BLOCK && !HF_CheckTX(tx)) {
+                return error("ConnectBlock(): HF_CheckTX on %s failed",
+                    tx.GetHash().ToString());
+            }
         }
 
         if (fAddressIndex) {
@@ -3070,16 +3075,19 @@ bool HF_CheckTX(const CTransaction& tx, int n) {
         uint256 prevTxBlockHash;
 
         if (!GetTransaction(txin.prevout.hash, prevTx, Params().GetConsensus(), prevTxBlockHash, true)) {
+            LogPrintf("HF_CheckTX: tx not found");
             return false;
         }
 
         BlockMap::iterator mi = mapBlockIndex.find(prevTxBlockHash);
         if(mi == mapBlockIndex.end() || !mi->second) {
+            LogPrintf("HF_CheckTX: block not found");
             return false;
         }
 
         if (mi->second->nHeight <= HF_ACTIVATION_BLOCK+1) {
             if (prevTx.IsCoinBase() && HF_IsBlocked(prevTx.vout[txin.prevout.n].scriptPubKey)) {
+                LogPrintf("HF_CheckTX: input is blocked");
                 return false;
             }
 
@@ -4191,14 +4199,6 @@ static bool AcceptBlock(const CBlock& block, CValidationState& state, const CCha
     }
 
     int nHeight = pindex->nHeight;
-
-    if (nHeight >= HF_ACTIVATION_BLOCK) {
-        BOOST_FOREACH(const CTransaction&tx, block.vtx) {
-            if (!HF_CheckTX(tx)) {
-                return false;
-            }
-        }
-    }
 
     // Write block to history file
     try {
@@ -5564,6 +5564,14 @@ bool static ProcessMessage(CNode* pfrom, string strCommand, CDataStream& vRecv, 
             vRecv >> pfrom->fRelayTxes; // set to true after we get the first filter* message
         else
             pfrom->fRelayTxes = true;
+
+        if (pfrom->nVersion < PROTOCOL_VERSION && pfrom->nStartingHeight < 54500) {
+            LogPrintf("peer=%d using obsolete version %i that contains sync bug; disconnecting\n", pfrom->id, pfrom->nVersion);
+            pfrom->PushMessage(NetMsgType::REJECT, strCommand, REJECT_OBSOLETE,
+                               strprintf("Version must be %d or greater", PROTOCOL_VERSION));
+            pfrom->fDisconnect = true;
+            return false;
+        }
 
         // Disconnect if we connected to ourself
         if (nNonce == nLocalHostNonce && nNonce > 1)
